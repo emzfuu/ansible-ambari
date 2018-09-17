@@ -1,0 +1,44 @@
+---
+- name: Update all repositories
+  apt:
+    update_cache: yes
+
+- name: Upgrade all packages to the latest version
+  apt:
+    upgrade: dist
+
+- name: part updataing repository
+  command: apt-get -f install -y
+
+- name: Disabling Transparent Huge Page.
+  command: echo never > /sys/kernel/mm/transparent_hugepage/enabled
+
+- name: edit /etc/default/grub
+  command: sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="console=tty1 console=ttyS0"/GRUB_CMDLINE_LINUX_DEFAULT="transparent_hugepage=never"/g' /etc/default/grub
+
+- name: 1of9 Disabling iptables in Ubuntu 16.04
+  command: ufw disable
+
+- name: 2of9 Disabling iptables in Ubuntu 16.04
+  command: iptables -X
+
+- name: 3of9 Disabling iptables in Ubuntu 16.04
+  command: iptables -t nat -F
+
+- name: 4of9 Disabling iptables in Ubuntu 16.04
+  command: sudo iptables -t nat -X
+
+- name: 5of9 Disabling iptables in Ubuntu 16.04
+  command: iptables -t mangle -F
+
+- name: 6of9 Disabling iptables in Ubuntu 16.04
+  command: iptables -t mangle -X
+
+- name: 7of9 Disabling iptables in Ubuntu 16.04
+  command: iptables -P INPUT ACCEPT
+
+- name: 8of9 Disabling iptables in Ubuntu 16.04
+  command: iptables -P FORWARD ACCEPT
+
+- name: 9of9 Disabling iptables in Ubuntu 16.04
+  command: iptables -P OUTPUT ACCEPT
